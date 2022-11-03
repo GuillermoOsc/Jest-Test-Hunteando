@@ -8,8 +8,36 @@ describe('comprobar si existe ruta GET /tasks', () =>{
       expect(response.statusCode).toBe(200); 
     }); 
 
-    test('Debe responder cun arreglo', async ()=> {
+    test('Debe responder un arreglo', async ()=> {
       const response = await request(app).get('/tasks').send()
       expect(response.body).toBeInstanceOf(Array)
    })
+});
+
+describe('POST /tasks', () => {
+   describe("Cuando el titulo y la descripción existen", () => {
+
+    const newTask = {
+        title: "Test tasks",
+        description: "Test Description"
+    }
+
+    test('Debe responder con un código de estado 200', async () => {
+        const response = await request(app).post("/tasks").send(newTask);
+        expect(response.statusCode).toBe(200);
+      });
+  
+    //   test("Debe contener un archivo tipo Json", async () => {
+    //       const response = await request(app).post("/tasks").send(newTask);
+    //       expect(response.headers["content-type"]).toEqual(
+    //        expect.stringContainig("json")
+    //       );
+    //   });
+  
+      test("Debe responder con un ID de tarea", async () => {
+          const response = await request(app).post("/tasks").send(newTask);
+      expect(response.body.id).toBeDefined();
+    });
+   })
+   
 });
